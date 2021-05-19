@@ -1,0 +1,50 @@
+<div class="container jumbotron">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>Generate backup Codes</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <p>Keep these backup codes safe in case you lose access to your authenticator app</p>
+                <hr />
+                <div class="row">
+                  <div class="otp-backup-codes">
+                    <% @backup_codes.each_slice(2) do |code1, code2| %>
+                      <div class="col-md-6"><code><%= code1 %></code></div>
+                      <div class="col-md-6"><code><%= code2 %></code></div>
+                    <% end %>
+                  </div>
+                </div>
+
+                <hr />
+                <div class="d-flex">
+                  <div class="copy_message alert alert-success hide"><%= t ".copy_message" %></div>
+                  <%= form_tag(download_two_factor_settings_path, method: :post,
+                                        class: "form-horizontal form-label-left download-two-factor") do %>
+                    <textarea name="two_fa[codes]" class="list-backup-codes hide"></textarea>
+                    <button type="button" class="btn btn-default btn-two-factor-download">
+                      <i class="fa fa-download"></i> Download
+                    </button>
+                    <button type="button" class="btn btn-default btn-two-factor-copy">
+                      <i class="fa fa-clipboard"></i> Copy
+                    </button>
+                  <% end %>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <%= form_tag(two_factor_settings_path, method: :patch, class: "form-horizontal form-label-left") do |f| %>
+                  <button type="submit" class="btn btn-info btn-enable-two-factor">Enable Two Factor Setting</button>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

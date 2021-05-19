@@ -1,0 +1,13 @@
+ @import "bootstrap-sprockets";
+ @import "bootstrap";
+
+.link_home_page {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.download-two-factor {
+  display: flex;
+  justify-content: space-between;
+}

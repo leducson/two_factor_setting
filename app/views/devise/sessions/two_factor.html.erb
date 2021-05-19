@@ -1,0 +1,45 @@
+<div class="container jumbotron">
+  <body class="login">
+    <div>
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+            <% flash.each do |key, value| %>
+              <% unless value.is_a? Hash%>
+                <div class="alert alert-<%= key == "notice" ? "info" : "danger"%>">
+                  <span class="close" data-dismiss="alert" aria-label="close">&times;</span>
+                  <%= value %>
+                </div>
+              <% end %>
+            <% end %>
+            <%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
+              <div class="otp_code <%= "hide" if params[:code_type] == "backup_code" %>">
+                <div>
+                  <%= f.text_field :otp_attempt, class: "form-control", placeholder: "Enter OTP Code", autofocus: "autofocus" %>
+                </div>
+                <div class="form-group">
+                  <span class="recover_code_link">Switch to backup code</span>
+                </div>
+              </div>
+              <div class="backup_code <%= "hide" if params[:code_type] != "backup_code" %>">
+                <div>
+                  <%= f.text_field :backup_code_attempt, class: "form-control", placeholder: "Enter backup code", autofocus: "autofocus" %>
+                </div>
+                <div class="form-group">
+                  <span class="otp_code_link">Switch to otp code</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="hidden" name="code_type" id="admin_code_type" value="<%= params[:code_type]%>" />
+                <%= f.button :submit, class: "btn btn-default submit" do %>
+                  <span class="text">Confirm</span>
+                <% end %>
+              </div>
+              <div class="clearfix"></div>
+            <% end %>
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
+</div>
