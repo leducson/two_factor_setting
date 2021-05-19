@@ -3,13 +3,13 @@ class TwoFactorSettingsController < ApplicationController
 
   def show
     return redirect_to new_two_factor_settings_path unless session[:codes] && current_user.otp_backup_codes?
-    return redirect_to edit_two_factor_settings_path(current_user) if current_user.otp_required_for_login?
+    return redirect_to edit_two_factor_settings_path if current_user.otp_required_for_login?
 
     @backup_codes = session[:codes]
   end
 
   def new
-    return redirect_to edit_two_factor_settings_path(current_user) if current_user.otp_required_for_login?
+    return redirect_to edit_two_factor_settings_path if current_user.otp_required_for_login?
 
     session.delete :password_token
     current_user.update! otp_secret: User.generate_otp_secret unless current_user.otp_secret?
@@ -32,7 +32,7 @@ class TwoFactorSettingsController < ApplicationController
       flash[:success] = "Enable two factor setting is success"
       session.delete :codes
       session[:password_token] = current_user.encrypted_password
-      redirect_to edit_two_factor_settings_path(current_user)
+      redirect_to edit_two_factor_settings_path
     else
       flash[:danger] = "Enable two factor setting is failed"
       redirect_to new_two_factor_settings_path
@@ -77,7 +77,7 @@ class TwoFactorSettingsController < ApplicationController
     current_user.save!
   rescue StandardError
     flash[:danger] = "Something went wrong"
-    redirect_to edit_two_factor_settings_path(current_user)
+    redirect_to edit_two_factor_settings_path
   end
 
   def download
@@ -91,7 +91,7 @@ class TwoFactorSettingsController < ApplicationController
     end
 
     session[:password_token] = current_user.encrypted_password
-    redirect_back fallback_location: ""
+    redirect_to new_two_factor_settings_path
   end
 
   private

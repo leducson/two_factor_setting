@@ -4,7 +4,7 @@ module AuthenticateWithOtpTwoFactor
   def authenticate_with_otp_two_factor
     user = self.resource = find_user
 
-    return prompt_for_two_factor(user) if session[:otp_admin_id].blank?
+    return prompt_for_two_factor(user) if session[:otp_user_id].blank?
 
     authenticate_user_with_backup_code_two_factor(user) if params[:code_type] == "backup_code"
     authenticate_user_with_otp_two_factor(user) unless params[:code_type] == "backup_code"
@@ -13,10 +13,10 @@ module AuthenticateWithOtpTwoFactor
   private
 
   def prompt_for_two_factor user
-    return unless session[:otp_admin_id] || user&.valid_password?(user_params[:password])
+    return unless session[:otp_user_id] || user&.valid_password?(user_params[:password])
 
     @user = user
-    session[:otp_admin_id] = user.id
+    session[:otp_user_id] = user.id
     render "devise/sessions/two_factor"
   end
 
@@ -28,7 +28,7 @@ module AuthenticateWithOtpTwoFactor
     end
 
     if user.current_otp == user_params[:otp_attempt] && user&.validate_and_consume_otp!(user_params[:otp_attempt])
-      session.delete :otp_admin_id
+      session.delete :otp_user_id
       sign_in user
     else
       flash.now[:danger] = "OTP Code invalid. Please try again"
@@ -47,7 +47,7 @@ module AuthenticateWithOtpTwoFactor
     end
 
     if user&.invalidate_otp_backup_code!(user_params[:backup_code_attempt])
-      session.delete :otp_admin_id
+      session.delete :otp_user_id
       sign_in user
     else
       flash.now[:danger] = "Backup code invalid"
@@ -65,8 +65,8 @@ module AuthenticateWithOtpTwoFactor
   def find_user
     if user_params[:email]
       User.find_by email: user_params[:email]
-    elsif session[:otp_admin_id]
-      User.find_by id: session[:otp_admin_id]
+    elsif session[:otp_user_id]
+      User.find_by id: session[:otp_user_id]
     end
   end
 

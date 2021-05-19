@@ -8,16 +8,16 @@
         </div>
         <div class="x_content">
           <%= form_tag(two_factor_settings_path, method: :delete, class: "form-horizontal form-label-left") do |f| %>
-            <button type="submit" class="btn btn-info btn-enable-two-factor"><%= t ".btn_disable_two_factor_setting" %></button>
+            <button type="submit" class="btn btn-info btn-enable-two-factor">Disable Two Factor Setting</button>
           <% end %>
           <hr />
-          <div class="col-md-3 col-sm-3 col-xs-12">
-            <h2><%= t ".generate_new_backup_code" %></h2>
+          <div class="col-md-8 col-sm-8 col-xs-12">
+            <h2>Generate New Backup Code</h2>
             <p>
-              <%= t ".generate_new_backup_code_warning" %>
+              When you generate new recovery codes, you must download or print the new codes. Your old codes won’t work anymore.
             </p>
             <a href="<%= generate_backup_code_two_factor_settings_path%>" class="btn btn-default">
-              <%= t ".generate_new_backup_code" %>
+              Generate New Backup Code
             </a>
           </div>
         </div>

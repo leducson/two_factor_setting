@@ -10,6 +10,14 @@
   </head>
 
   <body>
+    <% flash.each do |key, value| %>
+      <% unless value.is_a? Hash%>
+        <div class="alert alert-<%= key == "notice" ? "info" : "danger"%>">
+          <span class="close" data-dismiss="alert" aria-label="close">&times;</span>
+          <%= value %>
+        </div>
+      <% end %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
